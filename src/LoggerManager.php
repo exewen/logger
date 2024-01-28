@@ -39,6 +39,12 @@ class LoggerManager
         $this->config = $config;
     }
 
+    /**
+     * 设置驱动
+     * @param $driver
+     * @param $function
+     * @return LoggerInterface
+     */
     protected function driver($driver = null, $function = null): LoggerInterface
     {
         if (is_null($driver) && !is_null($function)) {
@@ -47,85 +53,90 @@ class LoggerManager
         return $this->get($driver ?? 'info');
     }
 
+    /**
+     * 获取channels或构建channels实例
+     * @param $name
+     * @return LoggerInterface
+     */
     protected function get($name): LoggerInterface
     {
         return $this->channels[$name] ?? $this->resolve($name);
     }
 
     /**
-     * 注册
-     * @param $name
+     * 构建
+     * @param $channelName
      * @return LoggerInterface
      */
-    protected function resolve($name): LoggerInterface
+    protected function resolve($channelName): LoggerInterface
     {
-        $config = $this->configurationFor($name);
+        $channelConfig = $this->configurationFor($channelName);
 
-        if (is_null($config)) {
-            throw new InvalidArgumentException("Log [{$name}] is not defined.");
+        if (is_null($channelConfig)) {
+            throw new InvalidArgumentException("Log [{$channelName}] is not defined.");
         }
-        $driverMethod = 'create' . ucfirst($config['driver']) . 'Driver';
+        $driverMethod = 'create' . ucfirst($channelConfig['driver']) . 'Driver';
 
         if (method_exists($this, $driverMethod)) {
-            return $this->channels[$name] = $this->{$driverMethod}($config);
+            return $this->channels[$channelName] = $this->{$driverMethod}($channelConfig);
         }
 
-        throw new InvalidArgumentException("Driver [{$config['driver']}] is not supported.");
+        throw new InvalidArgumentException("Driver [{$channelConfig['driver']}] is not supported.");
     }
 
     /**
      * 获取当前日志配置
-     * @param $name
+     * @param $channelName
      * @return array|mixed|null
      */
-    protected function configurationFor(&$name)
+    protected function configurationFor(&$channelName)
     {
-        $find = $this->config->get("logging.channels.{$name}");
+        $find = $this->config->get("logging.channels.{$channelName}");
         if (is_null($find)) {
             // 默认驱动替换
-            $name = $this->config->get("logging.default");
+            $channelName = $this->config->get("logging.default");
         }
-        return $this->config->get("logging.channels.{$name}");
+        return $this->config->get("logging.channels.{$channelName}");
     }
 
 
     /**
      * Create an instance of the daily file log driver.
      *
-     * @param array $config
+     * @param array $channelConfig
      * @return LoggerInterface
      */
-    protected function createDailyDriver(array $config)
+    protected function createDailyDriver(array $channelConfig)
     {
-        return new Monolog($this->parseChannel($config), [
+        return new Monolog($this->getMonologName(), [
             $this->prepareHandler(new RotatingFileHandler(
-                $config['path'],
-                $config['days'] ?? 30,
-                $this->level($config),
-                $config['bubble'] ?? true,
-                $config['permission'] ?? null,
-                $config['locking'] ?? false
-            ), $config),
+                $channelConfig['path'],
+                $channelConfig['days'] ?? 30,
+                $this->level($channelConfig),
+                $channelConfig['bubble'] ?? true,
+                $channelConfig['permission'] ?? null,
+                $channelConfig['locking'] ?? false
+            ), $channelConfig),
         ]);
     }
 
     /**
      * Create an instance of the single file log driver.
      *
-     * @param array $config
+     * @param array $channelConfig
      * @return LoggerInterface
      */
-    protected function createSingleDriver(array $config)
+    protected function createSingleDriver(array $channelConfig)
     {
-        return new Monolog($this->parseChannel($config), [
+        return new Monolog($this->getMonologName(), [
             $this->prepareHandler(
                 new StreamHandler(
-                    $config['path'],
-                    $this->level($config),
-                    $config['bubble'] ?? true,
-                    $config['permission'] ?? null,
-                    $config['locking'] ?? false
-                ), $config
+                    $channelConfig['path'],
+                    $this->level($channelConfig),
+                    $channelConfig['bubble'] ?? true,
+                    $channelConfig['permission'] ?? null,
+                    $channelConfig['locking'] ?? false
+                ), $channelConfig
             ),
         ]);
     }
@@ -151,7 +162,7 @@ class LoggerManager
     {
         return new LineFormatter(
             $config['constructor']['format'] ?? null,
-            $config['constructor']['dateFormat'] ?? $this->dateFormat,
+            $config['constructor']['date_format'] ?? $this->dateFormat,
             false,
             true
         );
@@ -167,14 +178,13 @@ class LoggerManager
         throw new InvalidArgumentException('Invalid log level.');
     }
 
-    protected function parseChannel(array $config)
+    /**
+     * 日志内标识(logging.DEBUG)
+     * @return string
+     */
+    private function getMonologName(): string
     {
-        return $config['name'] ?? $this->getFallbackChannelName();
-    }
-
-    private function getFallbackChannelName(): string
-    {
-        return $this->config->get('app.app_env', 'logging');
+        return $this->config->get('logging.monolog_name', 'local');
     }
 
 }

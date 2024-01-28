@@ -17,11 +17,11 @@ class ConfigRegister
                 LoggerInterface::class => Logger::class,
             ],
 
-            'app' => [
-                'app_env' => 'logging'
-            ],
 
             'logging' => [
+                // 记录日志name
+                'monolog_name' => 'local',
+                // 默认日志驱动
                 'default' => 'info',
                 // driver: daily/single
                 'channels' => [
@@ -47,7 +47,7 @@ class ConfigRegister
                         'formatter' => [
                             'constructor' => [
                                 'format' => LineFormatter::SIMPLE_FORMAT,
-                                'dateFormat' => NormalizerFormatter::SIMPLE_DATE,
+                                'date_format' => NormalizerFormatter::SIMPLE_DATE,
                             ],
                         ],
                     ],
@@ -59,7 +59,7 @@ class ConfigRegister
                         'formatter' => [
                             'constructor' => [
                                 'format' => LineFormatter::SIMPLE_FORMAT,
-                                'dateFormat' => NormalizerFormatter::SIMPLE_DATE,
+                                'date_format' => NormalizerFormatter::SIMPLE_DATE,
                             ],
                         ],
                     ]
