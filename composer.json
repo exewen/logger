@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">=7.3",
-        "exewen/di": "dev-develop",
+        "exewen/di": "^1.0",
         "monolog/monolog": "^1.24|^2.0"
     },
     "require-dev": {
