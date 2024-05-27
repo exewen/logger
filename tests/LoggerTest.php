@@ -10,7 +10,8 @@ use PHPUnit\Framework\TestCase;
 
 class LoggerTest extends TestCase
 {
-    private Container $app;
+//    private Container $app;
+    private $app;
 
     public function __construct()
     {

@@ -15,7 +15,7 @@
         "logger"
     ],
     "require": {
-        "php": ">=7.4",
+        "php": ">=7.3",
         "exewen/di": "dev-develop",
         "monolog/monolog": "^1.24|^2.0"
     },
@@ -32,7 +32,7 @@
             "ExewenTest\\Logger\\": "tests/"
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "config": {
         "sort-packages": true
     },

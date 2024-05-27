@@ -20,9 +20,12 @@ class LoggerManager
      *
      * @var array
      */
-    protected array $channels = [];
-    private ConfigInterface $config;
-    protected array $levels = [
+//    protected array $channels = [];
+    protected $channels = [];
+//    private ConfigInterface $config;
+    private  $config;
+//    protected array $levels = [
+    protected $levels = [
         'debug' => Monolog::DEBUG,
         'info' => Monolog::INFO,
         'notice' => Monolog::NOTICE,
@@ -32,7 +35,8 @@ class LoggerManager
         'alert' => Monolog::ALERT,
         'emergency' => Monolog::EMERGENCY,
     ];
-    protected string $dateFormat = 'Y-m-d H:i:s';
+//    protected string $dateFormat = 'Y-m-d H:i:s';
+    protected $dateFormat = 'Y-m-d H:i:s';
 
     public function __construct(ConfigInterface $config)
     {
