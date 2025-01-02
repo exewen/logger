@@ -17,37 +17,37 @@ class Logger extends LoggerManager implements LoggerInterface
     public function debug($message, array $context = [])
     {
         $context = $this->formatContext($message, $context);
-        $this->driver(null, __FUNCTION__)->debug(null, $context);
+        $this->driver(null, __FUNCTION__)->debug('', $context);
     }
 
     public function request($message, array $context = [])
     {
         $context = $this->formatContext($message, $context);
-        $this->driver(null, __FUNCTION__)->info(null, $context);
+        $this->driver(null, __FUNCTION__)->info('', $context);
     }
 
     public function info($message, array $context = [])
     {
         $context = $this->formatContext($message, $context);
-        $this->driver(null, __FUNCTION__)->info(null, $context);
+        $this->driver(null, __FUNCTION__)->info('', $context);
     }
 
     public function notice($message, array $context = [])
     {
         $context = $this->formatContext($message, $context);
-        $this->driver(null, __FUNCTION__)->notice(null, $context);
+        $this->driver(null, __FUNCTION__)->notice('', $context);
     }
 
     public function warning($message, array $context = [])
     {
         $context = $this->formatContext($message, $context);
-        $this->driver(null, __FUNCTION__)->warning(null, $context);
+        $this->driver(null, __FUNCTION__)->warning('', $context);
     }
 
     public function error($message, array $context = [])
     {
         $context = $this->formatContext($message, $context);
-        $this->driver(null, __FUNCTION__)->error(null, $context);
+        $this->driver(null, __FUNCTION__)->error('', $context);
     }
 
     private function formatContext($message, array $context): array
