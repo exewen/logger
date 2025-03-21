@@ -1,0 +1,6 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="日志" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+    <TestRunner class="ExewenTest\Logger\LoggerTest" file="$PROJECT_DIR$/tests/LoggerTest.php" scope="Class" />
+    <method v="2" />
+  </configuration>
+</component>
