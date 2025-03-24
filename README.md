@@ -13,7 +13,7 @@ cp -rf ./publish/exewen /your_project/config
 ## 写入日志
 ```php
 # 初始化DI
-$app = new Container();
+$app      = ApplicationContext::getContainer();
 $app->setProviders([LoggerProvider::class]);
 $this->app = $app;
 
